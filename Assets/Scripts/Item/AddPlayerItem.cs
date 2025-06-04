@@ -16,7 +16,7 @@ public class AddPlayerItem : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // 随机生成 2 到 8 个小人
-            int playerCount = Random.Range(2, 9); // 上限是独占的，所以是 9
+            int playerCount = Random.Range(2, 9);
             for (int i = 0; i < playerCount; i++)
             {
                 SpawnNewPlayer(collision.transform.position);
