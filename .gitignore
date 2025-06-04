@@ -1,31 +1,17 @@
-# Unity 默认忽略项
 [Ll]ibrary/
 [Tt]emp/
-[Oo]bj/
 [Bb]uild/
 [Bb]uilds/
-[Ll]ogs/
+obj/
+.vscode/
 UserSettings/
 MemoryCaptures/
-.vscode/
-
-# 自动生成文件
 *.csproj
-*.unityproj
 *.sln
-*.suo
-*.tmp
 *.user
-*.userprefs
 *.pidb
 *.booproj
 *.svd
-*.pdb
-*.mdb
-
-# 系统文件
 .DS_Store
-Thumbs.db
-
-# Unity Package Cache
-Packages/com.unity.*
+*.apk
+*.unitypackage
