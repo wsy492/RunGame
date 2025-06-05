@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BubbleBehavior : MonoBehaviour
 {
-    public float riseSpeed = 1f; // 泡泡上升速度
-    public float lifeTime = 2f;  // 泡泡存活时间 (在水中的最大存活时间)
+    public float riseSpeed = 2f; // 泡泡上升速度
+    public float lifeTime = 5f;  // 泡泡存活时间 (在水中的最大存活时间)
     public Vector2 initialForceRangeX = new Vector2(-0.2f, 0.2f); // X轴初始随机力的范围
 
     private bool isInWater = false; // 默认泡泡不在水中，需要检测来确认
