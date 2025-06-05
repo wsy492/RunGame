@@ -8,6 +8,7 @@ TagManager:
   - Trap
   - Ground
   - ReleaseLimitation
+  - Water
   layers:
   - Default
   - TransparentFX

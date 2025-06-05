@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 3112792383863352885}
   m_Layer: 0
   m_Name: SpikedBall
-  m_TagString: Untagged
+  m_TagString: Trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
