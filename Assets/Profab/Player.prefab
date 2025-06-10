@@ -209,6 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathSound: {fileID: 5191692953651597851}
+  shieldPrefab: {fileID: 736490471497125547, guid: a3b744a29834ed642936b142bded837b, type: 3}
 --- !u!95 &8623496000062439869
 Animator:
   serializedVersion: 7
