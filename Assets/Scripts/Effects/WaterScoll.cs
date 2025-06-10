@@ -22,6 +22,15 @@ public class WaterScroll : MonoBehaviour
         {
             offset += scrollSpeed * Time.deltaTime;
             mat.SetVector("_Offset", new Vector4(offset.x, offset.y, 0, 0));
+
+            // 让SpriteRenderer的Color影响透明度
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                mat.SetColor("_RendererColor", sr.color);
+                Debug.Log("当前透明度: " + sr.color.a);
+            }
         }
+
     }
 }

@@ -16,9 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed = 10f;
 
     // 水域中的属性
-    [SerializeField] private float waterGravityScale = 0.5f;
-    [SerializeField] private float waterMoveSpeed = 2f;
-    [SerializeField] private float waterMaxSpeed = 4f;
+    [SerializeField] private float waterGravityScale = 1f;
+    [SerializeField] private float waterMoveSpeed = 3f;
+    [SerializeField] private float waterMaxSpeed = 5f;
 
     // 用于存储原始属性
     private float originalGravityScale;
@@ -237,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
             // this.moveSpeed = waterMoveSpeed; // 这会覆盖基础的 moveSpeed
             // this.maxSpeed = waterMaxSpeed;   // 这会覆盖基础的 maxSpeed
             StartBubbleEffect(); // 进入水中，开始吐泡泡
-            Debug.Log("Entered Water");
+            //Debug.Log("Entered Water");
         }
     }
 
@@ -250,7 +250,7 @@ public class PlayerMovement : MonoBehaviour
             // this.moveSpeed = originalMoveSpeed;
             // this.maxSpeed = originalMaxSpeed;
             StopBubbleEffect(); // 离开水中，停止吐泡泡
-            Debug.Log("Exited Water");
+                                // Debug.Log("Exited Water");
         }
     }
 

@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     private static Dictionary<PlayerMovement, Vector3> originalScales = new Dictionary<PlayerMovement, Vector3>();
     private const int MaxPlayerCount = 50; // 最大小人数量
     [SerializeField] private RuntimeAnimatorController[] playerOverrideControllers;
+    private static int initialPlayerCount = 0;
 
     public static void Register(PlayerMovement player)
     {
@@ -63,11 +64,13 @@ public class PlayerManager : MonoBehaviour
         if (players.Count >= MaxPlayerCount)
         {
             isGameStarted = true;
+            initialPlayerCount = players.Count;
         }
         // 松开鼠标左键，游戏正式开始
         else if (Input.GetMouseButtonUp(0)) // 鼠标左键松开
         {
             isGameStarted = true;
+            initialPlayerCount = players.Count;
         }
     }
 
@@ -194,5 +197,10 @@ public class PlayerManager : MonoBehaviour
                 rb.AddForce(dir.normalized * forceStrength);
             }
         }
+    }
+
+    public static int GetInitialPlayerCount()
+    {
+        return initialPlayerCount;
     }
 }

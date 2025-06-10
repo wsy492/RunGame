@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public RoomModule[] roomPrefabs;
-    public RoomModule[] turnRoomPrefabs; // 支持多个转弯房间预制体
     public RoomModule startRoomPrefab;
     public Transform startPoint;
     public Level level;
     public float turnRoomProbability = 0.3f;          // 新增：转弯房间出现的概率
     private int consecutiveStraightRooms = 0; // 连续生成的直线房间数量
-    private Quaternion lastExitRotation = Quaternion.identity;
+    public Quaternion lastExitRotation = Quaternion.identity;
     private RoomModule currentRoom; // 玩家当前所在的房间
-    private Transform lastExit;
+    public Transform lastExit;
     public RoomModule[] easyRooms;
     public RoomModule[] mediumRooms;
     public RoomModule[] hardRooms;
+    public RoomModule[] veryHardRooms;
 
     void Start()
     {
@@ -33,9 +32,8 @@ public class LevelGenerator : MonoBehaviour
             score.currentRoom = startRoom;
         }
 
-        // 生成第2个和第3个房间
+        // 生成第2个房间
         SpawnNextRoom(); // 简单难度
-        SpawnNextRoom(); // 中等难度
 
         // 给起始房间的出口触发器赋值
         var startTrigger = startRoom.exitPosition.GetComponentInChildren<RoomExitTrigger>();
@@ -54,51 +52,49 @@ public class LevelGenerator : MonoBehaviour
     {
         RoomModule roomPrefab;
 
+        Debug.Log($"{level.rooms.Count}");
+
         // 特殊处理前3个房间
-        if (level.rooms.Count == 1) // 第2个房间（简单难度，直线房间）
+        if (level.rooms.Count == 1) // 第1个房间（简单难度，直线房间）
         {
-            roomPrefab = GetStraightRoom(easyRooms);
+            roomPrefab = GetRoomByType(easyRooms, RoomModule.RoomType.Straight);
+            consecutiveStraightRooms++; // 增加直线房间计数
         }
-        else if (level.rooms.Count == 2) // 第3个房间（简单难度，直线房间）
+        else if (level.rooms.Count == 2) // 第2个房间（中等难度，直线房间）
         {
-            roomPrefab = GetStraightRoom(easyRooms);
-        }
-        else if (level.rooms.Count == 3) // 第4个房间（中等难度）
-        {
-            // 从 mediumRooms 中随机选择直线房间或转弯房间
-            bool shouldSpawnTurnRoom = Random.value < turnRoomProbability;
-            roomPrefab = shouldSpawnTurnRoom ? GetTurnRoom(mediumRooms) : GetStraightRoom(mediumRooms);
-        }
-        else if (level.rooms.Count == 4) // 第5个房间（中等难度）
-        {
-            // 从 mediumRooms 中随机选择直线房间或转弯房间
-            bool shouldSpawnTurnRoom = Random.value < turnRoomProbability;
-            roomPrefab = shouldSpawnTurnRoom ? GetTurnRoom(mediumRooms) : GetStraightRoom(mediumRooms);
+            roomPrefab = GetRoomByType(mediumRooms, RoomModule.RoomType.Straight);
+            consecutiveStraightRooms++; // 增加直线房间计数
         }
         else
         {
-            // 从第6个房间开始，按难度自适应逻辑生成
+            // 从第3个房间开始，按难度自适应逻辑生成
             RoomModule[] roomPool = DifficultyManager.Instance.GetDifficultyLevel() switch
             {
                 1 => easyRooms,   // 简单房间池
                 2 => mediumRooms, // 中等房间池
                 3 => hardRooms,   // 困难房间池
-                _ => mediumRooms, // 默认中等房间池
+                4 => veryHardRooms,
+                //_ => mediumRooms, // 默认中等房间池
             };
+            Debug.Log($"当前难度等级: {DifficultyManager.Instance.GetDifficultyLevel()}");
 
-            // 判断是否生成转弯房间
-            bool shouldSpawnTurnRoom = Random.value < turnRoomProbability && consecutiveStraightRooms >= 2;
+            // 判断是否可以生成转弯房间：
+            // 1. 要连续2个直线房间
+            // 2. 且上次转弯后至少有2个直线房间
+            bool canSpawnTurn = consecutiveStraightRooms >= 2;
+            bool shouldSpawnTurnRoom = canSpawnTurn && Random.value < turnRoomProbability;
 
             if (shouldSpawnTurnRoom)
             {
                 // 从房间池中选择一个转弯房间
-                roomPrefab = GetTurnRoom(roomPool);
+                roomPrefab = GetRoomByType(roomPool, RoomModule.RoomType.Turn);
                 consecutiveStraightRooms = 0; // 重置直线房间计数
+                Debug.Log("生成转弯房间，重置计数器");
             }
             else
             {
                 // 从房间池中选择一个直线房间
-                roomPrefab = GetStraightRoom(roomPool);
+                roomPrefab = GetRoomByType(roomPool, RoomModule.RoomType.Straight);
                 consecutiveStraightRooms++; // 增加直线房间计数
             }
         }
@@ -136,16 +132,16 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private RoomModule GetStraightRoom(RoomModule[] roomPool)
+    private RoomModule GetRoomByType(RoomModule[] roomPool, RoomModule.RoomType type)
     {
-        // 从房间池中选择一个直线房间
-        return roomPool[Random.Range(0, roomPool.Length)];
-    }
-
-    private RoomModule GetTurnRoom(RoomModule[] roomPool)
-    {
-        // 从房间池中选择一个转弯房间
-        return roomPool[Random.Range(0, roomPool.Length)];
+        // 只筛选出指定类型的房间
+        var filtered = System.Array.FindAll(roomPool, r => r.roomType == type);
+        if (filtered.Length == 0)
+        {
+            Debug.LogWarning($"没有找到类型为 {type} 的房间！");
+            return roomPool[0]; // 兜底返回
+        }
+        return filtered[Random.Range(0, filtered.Length)];
     }
 
     public void SetCurrentRoom(RoomModule room)
@@ -165,5 +161,9 @@ public class LevelGenerator : MonoBehaviour
 
         // 更新当前房间
         currentRoom = room;
+        while (level.rooms.Count > 4)
+        {
+            level.RemoveRoom(level.rooms[0]);
+        }
     }
 }

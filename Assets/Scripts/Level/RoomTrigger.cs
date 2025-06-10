@@ -22,13 +22,7 @@ public class RoomExitTrigger : MonoBehaviour
                     score.currentRoom = thisRoom;
                 }
 
-                // 检查当前房间是否是 startRoom
-                var currentRoom = transform.parent.GetComponent<RoomModule>();
-                if (currentRoom != null && currentRoom.roomType != RoomModule.RoomType.Start)
-                {
-                    // 增加已通过房间计数
-                    DifficultyManager.Instance.IncrementPassedRoomCount();
-                }
+                DifficultyManager.Instance.IncrementPassedRoomCount();
 
                 // 先更新当前房间
                 levelGenerator.SetCurrentRoom(transform.parent.GetComponent<RoomModule>());
