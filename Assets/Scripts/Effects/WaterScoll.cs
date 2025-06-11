@@ -28,7 +28,7 @@ public class WaterScroll : MonoBehaviour
             if (sr != null)
             {
                 mat.SetColor("_RendererColor", sr.color);
-                Debug.Log("当前透明度: " + sr.color.a);
+                //   Debug.Log("当前透明度: " + sr.color.a);
             }
         }
 

@@ -7,20 +7,27 @@ public class PlayerLife : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     [SerializeField] private AudioSource deathSound;
+    [SerializeField] private AudioSource shieldBlockSound;
     private bool isShielded = false;
     private float shieldTimer = 0f;
     [SerializeField] private GameObject shieldPrefab; // 拖你的泡泡预制体到这里
     private GameObject shieldInstance;
+    private float spawnInvincibleTime = 0.5f;
+    private float spawnTimer = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spawnTimer = spawnInvincibleTime;
     }
 
     void Update()
     {
+        if (spawnTimer > 0f)
+            spawnTimer -= Time.deltaTime;
+
         if (isShielded)
         {
             shieldTimer -= Time.deltaTime;
@@ -35,9 +42,18 @@ public class PlayerLife : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (spawnTimer > 0f) return;
+
         if (collision.gameObject.CompareTag("Trap"))
         {
-            deathSound.Play();
+            if (isShielded)
+            {
+                if (shieldBlockSound != null)
+                    shieldBlockSound.Play();
+                return;
+            }
+            if (deathSound != null)
+                deathSound.Play();
             Die();
         }
     }

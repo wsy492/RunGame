@@ -38,6 +38,11 @@ public class DifficultyManager : MonoBehaviour
 
         // 动态调整难度阈值
         difficultyThreshold = Mathf.Max(0.3f, initialThreshold - passedRoomCount * thresholdDecayRate);
+
+        int alivePlayers = PlayerManager.GetAlivePlayers().Count;
+        float survivalRatio = (float)alivePlayers / Mathf.Max(1, initialPlayerCount);
+
+        Debug.Log($"[难度调试] 当前房间数: {passedRoomCount - 1}，存活玩家数: {alivePlayers}，存活率: {survivalRatio:P1}，当前难度: {difficultyLevel}");
     }
 
     private void AdjustDifficulty()
@@ -56,10 +61,7 @@ public class DifficultyManager : MonoBehaviour
         // 3. 30关以后，难度下限锁定为3，只能提升
         if (passedRoomCount > 30)
         {
-            if (survivalRatio > 0.7f)
-                difficultyLevel = 4; // 存活率高，提升难度到4（你可以根据实际情况设定最大值）
-            else
-                difficultyLevel = 3; // 不再降低
+            difficultyLevel = 3;
         }
         else
         {

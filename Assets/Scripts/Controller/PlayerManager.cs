@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
     private const int MaxPlayerCount = 50; // 最大小人数量
     [SerializeField] private RuntimeAnimatorController[] playerOverrideControllers;
     private static int initialPlayerCount = 0;
+    [SerializeField] private AudioSource spawnSound;
 
     public static void Register(PlayerMovement player)
     {
@@ -124,6 +125,9 @@ public class PlayerManager : MonoBehaviour
         }
 
         Register(newPlayer.GetComponent<PlayerMovement>());
+
+        if (spawnSound != null)
+            spawnSound.Play();
     }
 
     public static List<PlayerMovement> GetAlivePlayers()

@@ -13,7 +13,6 @@ public class LevelGenerator : MonoBehaviour
     public RoomModule[] easyRooms;
     public RoomModule[] mediumRooms;
     public RoomModule[] hardRooms;
-    public RoomModule[] veryHardRooms;
 
     void Start()
     {
@@ -52,8 +51,6 @@ public class LevelGenerator : MonoBehaviour
     {
         RoomModule roomPrefab;
 
-        Debug.Log($"{level.rooms.Count}");
-
         // 特殊处理前3个房间
         if (level.rooms.Count == 1) // 第1个房间（简单难度，直线房间）
         {
@@ -73,8 +70,7 @@ public class LevelGenerator : MonoBehaviour
                 1 => easyRooms,   // 简单房间池
                 2 => mediumRooms, // 中等房间池
                 3 => hardRooms,   // 困难房间池
-                4 => veryHardRooms,
-                //_ => mediumRooms, // 默认中等房间池
+                _ => hardRooms   // 默认hard房间池
             };
             Debug.Log($"当前难度等级: {DifficultyManager.Instance.GetDifficultyLevel()}");
 
@@ -89,7 +85,7 @@ public class LevelGenerator : MonoBehaviour
                 // 从房间池中选择一个转弯房间
                 roomPrefab = GetRoomByType(roomPool, RoomModule.RoomType.Turn);
                 consecutiveStraightRooms = 0; // 重置直线房间计数
-                Debug.Log("生成转弯房间，重置计数器");
+                                              //  Debug.Log("生成转弯房间，重置计数器");
             }
             else
             {
