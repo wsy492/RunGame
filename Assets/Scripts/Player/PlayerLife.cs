@@ -7,12 +7,30 @@ public class PlayerLife : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     [SerializeField] private AudioSource deathSound;
+    private bool isShielded = false;
+    private float shieldTimer = 0f;
+    [SerializeField] private GameObject shieldPrefab; // 拖你的泡泡预制体到这里
+    private GameObject shieldInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        if (isShielded)
+        {
+            shieldTimer -= Time.deltaTime;
+            if (shieldTimer <= 0f)
+            {
+                isShielded = false;
+                if (shieldInstance != null)
+                    shieldInstance.SetActive(false);
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -24,8 +42,33 @@ public class PlayerLife : MonoBehaviour
         }
     }
 
+    public void ActivateShield(float duration)
+    {
+        isShielded = true;
+        shieldTimer = duration;
+
+        if (shieldInstance == null && shieldPrefab != null)
+        {
+            shieldInstance = Instantiate(shieldPrefab, transform);
+            shieldInstance.transform.localPosition = Vector3.zero;
+            shieldInstance.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        }
+        else if (shieldInstance != null)
+        {
+            shieldInstance.SetActive(true);
+            shieldInstance.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        }
+    }
+
+    public bool IsShielded()
+    {
+        return isShielded;
+    }
+
     public void Die()
     {
+        if (isShielded) return;
+
         // 播放死亡音效
         deathSound.Play();
 

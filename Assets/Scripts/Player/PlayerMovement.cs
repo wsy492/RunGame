@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isAlive = true;
     public bool canJump = true;
+    private Coroutine speedEffectCoroutine;
 
     // 新增：吐泡泡效果相关
     [Header("水下效果 (Water Effects)")] // 在Inspector中添加一个标题，方便区分
@@ -282,5 +283,25 @@ public class PlayerMovement : MonoBehaviour
             Instantiate(bubblePrefab, spawnPos, Quaternion.identity); // 在生成点实例化泡泡
             yield return new WaitForSeconds(bubbleSpawnInterval); // 等待指定间隔
         }
+    }
+
+    public void ChangeSpeedTemp(float newMoveSpeed, float newMaxSpeed, float duration)
+    {
+        Debug.Log($"ChangeSpeedTemp called: moveSpeed={newMoveSpeed}, maxSpeed={newMaxSpeed}, duration={duration}");
+        if (speedEffectCoroutine != null)
+            StopCoroutine(speedEffectCoroutine);
+        speedEffectCoroutine = StartCoroutine(SpeedEffectCoroutine(newMoveSpeed, newMaxSpeed, duration));
+    }
+
+    private IEnumerator SpeedEffectCoroutine(float newMoveSpeed, float newMaxSpeed, float duration)
+    {
+        float oldMoveSpeed = moveSpeed;
+        float oldMaxSpeed = maxSpeed;
+        moveSpeed = newMoveSpeed;
+        maxSpeed = newMaxSpeed;
+        yield return new WaitForSeconds(duration);
+        moveSpeed = oldMoveSpeed;
+        maxSpeed = oldMaxSpeed;
+        speedEffectCoroutine = null;
     }
 }
