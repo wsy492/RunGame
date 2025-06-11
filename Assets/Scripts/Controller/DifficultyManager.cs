@@ -51,15 +51,21 @@ public class DifficultyManager : MonoBehaviour
 
         // 1. 基础难度分段
         int baseDifficulty = 1;
-        if (passedRoomCount > 30) baseDifficulty = 3;
-        else if (passedRoomCount > 20) baseDifficulty = 3;
-        else if (passedRoomCount > 10) baseDifficulty = 2;
+        if (passedRoomCount > 20) baseDifficulty = 3;
+        else if (passedRoomCount > 14) baseDifficulty = 3;
+        else if (passedRoomCount > 7) baseDifficulty = 2;
 
         // 2. 存活率影响因素
         float survivalRatio = (float)alivePlayers / Mathf.Max(1, initialPlayerCount);
 
-        // 3. 30关以后，难度下限锁定为3，只能提升
-        if (passedRoomCount > 30)
+        if (passedRoomCount <= 7 && survivalRatio > 1.5f)
+        {
+            difficultyLevel = 3;
+            return;
+        }
+
+        // 3. 30关以后，难度下限锁定为3
+        if (passedRoomCount > 20)
         {
             difficultyLevel = 3;
         }

@@ -204,18 +204,44 @@ public class CameraFollow : MonoBehaviour
 
             if (closePlayers.Count == 0)
                 return; // 如果没有小人满足条件，不调整摄像机大小
-
-            // 计算边界
+                        // 计算边界
             Bounds bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
             foreach (var player in closePlayers)
             {
                 bounds.Encapsulate(player.transform.position);
             }
 
-            // 根据边界的大小调整摄像机的正交大小
-            float requiredSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f + sizePadding;
+            // 获取重力方向
+            Vector2 gravityDir = Physics2D.gravity.normalized;
+            // 获取垂直于重力的方向
+            Vector2 perpDir = new Vector2(-gravityDir.y, gravityDir.x);
+
+            // 投影到重力方向和垂直方向，分别得到两个方向的长度
+            float sizeGravity = Mathf.Abs(Vector2.Dot(new Vector2(bounds.size.x, bounds.size.y), gravityDir));
+            float sizePerp = Mathf.Abs(Vector2.Dot(new Vector2(bounds.size.x, bounds.size.y), perpDir));
+
+            // 在垂直于重力方向上加大padding
+            float perpPadding = sizePadding + 4f; // 这里2.5f可以自己调，越大视野越宽
+            float gravityPadding = sizePadding;
+
+            // 计算最终需要的正交大小
+            float requiredSize = Mathf.Max(
+                sizeGravity / 2f + gravityPadding,
+                sizePerp / 2f + perpPadding
+            );
             cam.orthographicSize = Mathf.Clamp(requiredSize, minOrthographicSize, maxOrthographicSize);
         }
+        //     // 计算边界
+        //     Bounds bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
+        //     foreach (var player in closePlayers)
+        //     {
+        //         bounds.Encapsulate(player.transform.position);
+        //     }
+
+        //     // 根据边界的大小调整摄像机的正交大小
+        //     float requiredSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f + sizePadding;
+        //     cam.orthographicSize = Mathf.Clamp(requiredSize, minOrthographicSize, maxOrthographicSize);
+        // }
     }
 
     private Vector3 GetCenterPoint(List<PlayerMovement> players)

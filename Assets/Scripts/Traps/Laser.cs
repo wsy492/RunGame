@@ -28,11 +28,11 @@ public class Laser : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                // 获取PlayerMovement脚本并调用死亡方法
-                PlayerMovement player = other.GetComponent<PlayerMovement>();
-                if (player != null)
+                // 获取PlayerLife脚本并调用死亡方法
+                PlayerLife playerLife = other.GetComponent<PlayerLife>();
+                if (playerLife != null)
                 {
-                    player.Die();
+                    playerLife.Die();
                 }
             }
         }

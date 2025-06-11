@@ -147,8 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103de89ceb989e14890f3d0ef51aeefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedUpValue: 15
-  speedUpMax: 20
+  speedUpValue: 10
+  speedUpMax: 12
   speedDownValue: 2
   speedDownMax: 4
   effectDuration: 3

@@ -83,7 +83,12 @@ public class PlayerLife : MonoBehaviour
 
     public void Die()
     {
-        if (isShielded) return;
+        if (isShielded)
+        {
+            if (shieldBlockSound != null)
+                shieldBlockSound.Play();
+            return;
+        }
 
         // 播放死亡音效
         deathSound.Play();

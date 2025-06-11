@@ -16,9 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed = 10f;
 
     // 水域中的属性
-    [SerializeField] private float waterGravityScale = 1f;
-    [SerializeField] private float waterMoveSpeed = 3f;
-    [SerializeField] private float waterMaxSpeed = 5f;
+    [SerializeField] private float waterGravityScale = 4f;
+    [SerializeField] private float waterMoveSpeed = 4f;
+    [SerializeField] private float waterMaxSpeed = 7f;
 
     // 用于存储原始属性
     private float originalGravityScale;
@@ -116,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
     public void TryJump()
     {
         if (!canJump) return;
+        Debug.Log("尝试跳跃");
 
         rb.linearVelocity = Vector2.zero;
         Vector2 jumpDirection = -Physics2D.gravity.normalized;

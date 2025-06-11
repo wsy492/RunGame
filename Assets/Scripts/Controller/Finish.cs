@@ -17,7 +17,8 @@ public class Finish : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("游戏结束：所有小人都死亡！");
+        // Debug.Log("游戏结束：所有小人都死亡！");
+        SceneManager.LoadScene("Finish");
 
     }
 }

@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.2
-  direction: -1
+  direction: 1
 --- !u!60 &2020426297012500629
 PolygonCollider2D:
   m_ObjectHideFlags: 0
