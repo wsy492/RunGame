@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class smashers_spikes : MonoBehaviour
 {
-    public float moveDistance = 3f; // 伸缩最大距离
-    public float moveSpeed = 2f;    // 伸缩速度
+    public float moveDistance = 3f; // Maximum extension distance
+    public float moveSpeed = 2f;    // Extension speed
 
     private Vector3 startPos;
 
@@ -14,7 +14,7 @@ public class smashers_spikes : MonoBehaviour
 
     void Update()
     {
-        // 让machine在杆上来回伸缩
+        // Make the machine move back and forth along the rod
         float offset = Mathf.PingPong(Time.time * moveSpeed, moveDistance);
         transform.localPosition = startPos + Vector3.up * offset;
     }

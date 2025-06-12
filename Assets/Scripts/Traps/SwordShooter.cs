@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class SwordShooter : MonoBehaviour
 {
-    public GameObject swordPrefab;      // 剑的预制体
-    public Transform firePoint;         // 发射点
-    public float fireInterval = 2f;     // 发射间隔（秒）
-    public float swordSpeed = 8f;       // 剑的速度
+    public GameObject swordPrefab;      // Sword prefab
+    public Transform firePoint;         // Firing point
+    public float fireInterval = 2f;     // Firing interval (seconds)
+    public float swordSpeed = 8f;       // Sword speed
 
     private float timer = 0f;
 
@@ -25,7 +25,7 @@ public class SwordShooter : MonoBehaviour
         Rigidbody2D rb = sword.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.linearVelocity = firePoint.right * swordSpeed; // firePoint的右方向为发射方向
+            rb.linearVelocity = firePoint.right * swordSpeed; // firePoint's right direction is the firing direction
         }
     }
 }

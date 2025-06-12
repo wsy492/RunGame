@@ -3,26 +3,26 @@ using System.Collections;
 
 public class ZoomItem : MonoBehaviour
 {
-    // 缩放比例
-    private const float scaleUp = 1.4f; // 变大比例
-    private const float scaleDown = 0.75f; // 变小比例
+    // Scale ratios
+    private const float scaleUp = 1.4f; // Scale up ratio
+    private const float scaleDown = 0.75f; // Scale down ratio
 
-    // 摄像机调整值
-    private const float cameraAdjustUp = 2.5f; // 摄像机远离值
-    private const float cameraAdjustDown = -100f; // 摄像机靠近值
+    // Camera adjustment values
+    private const float cameraAdjustUp = 2.5f; // Camera zoom out value
+    private const float cameraAdjustDown = -100f; // Camera zoom in value
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            int random = Random.Range(0, 2); // 0 或 1
+            int random = Random.Range(0, 2); // 0 or 1
             float targetScale = random == 0 ? scaleUp : scaleDown;
             float cameraAdjust = random == 0 ? cameraAdjustUp : cameraAdjustDown;
             PlayerManager.ScaleAllPlayers(targetScale);
             Camera.main.GetComponent<CameraFollow>().AdjustCamera(cameraAdjust);
             Destroy(gameObject);
 
-            // 使用全局计时器延迟恢复和销毁
+            // Use global timer to delay restore and destroy
             TimerManager.Instance.StartTimer(5f, RestoreAndDestroy);
         }
     }
@@ -31,7 +31,7 @@ public class ZoomItem : MonoBehaviour
     {
         Debug.Log("Restoring player scales after zoom item effect.");
         PlayerManager.RestoreAllPlayersScale();
-        // 这里是最后一句
+        // This is the last line
     }
 
 }

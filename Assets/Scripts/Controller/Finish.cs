@@ -7,7 +7,7 @@ public class Finish : MonoBehaviour
 
     void Update()
     {
-        // 只有在游戏开始后才检测是否还有存活的小人
+        // Only check if there are any alive players after the game starts
         if (PlayerManager.Instance.isGameStarted && !isFinished && PlayerManager.GetAlivePlayers().Count == 0)
         {
             isFinished = true;
@@ -17,7 +17,7 @@ public class Finish : MonoBehaviour
 
     private void GameOver()
     {
-        // Debug.Log("游戏结束：所有小人都死亡！");
+        // Debug.Log("Game Over: All players are dead!");
         SceneManager.LoadScene("Finish");
 
     }

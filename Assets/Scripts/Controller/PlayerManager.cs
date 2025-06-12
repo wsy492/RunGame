@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
     private static List<PlayerMovement> players = new List<PlayerMovement>();
-    private float spawnCooldown = 0.1f; // 每次生成小人的间隔时间（秒）
-    private float lastSpawnTime = 0f;  // 上次生成小人的时间、
+    private float spawnCooldown = 0.1f; // Interval time (seconds) for spawning each player
+    private float lastSpawnTime = 0f;  // Last spawn time
 
-    private int currentPrefabIndex = 0; // 当前预制体索引
+    private int currentPrefabIndex = 0; // Current prefab index
 
-    public bool isGameStarted = false; // 游戏是否已经开始
-    [SerializeField] private GameObject[] basePlayerPrefab; // 小人预制体数
-    private Transform spawnPoint; // 小人生成点
+    public bool isGameStarted = false; // Whether the game has started
+    [SerializeField] private GameObject[] basePlayerPrefab; // Player prefabs
+    private Transform spawnPoint; // Player spawn point
     private static Dictionary<PlayerMovement, Vector3> originalScales = new Dictionary<PlayerMovement, Vector3>();
-    private const int MaxPlayerCount = 50; // 最大小人数量
+    private const int MaxPlayerCount = 50; // Maximum number of players
     [SerializeField] private RuntimeAnimatorController[] playerOverrideControllers;
     private static int initialPlayerCount = 0;
     [SerializeField] private AudioSource spawnSound;
+    public Text tipText;
 
     public static void Register(PlayerMovement player)
     {
@@ -41,34 +43,38 @@ public class PlayerManager : MonoBehaviour
     {
         if (!isGameStarted)
         {
+            if (tipText != null)
+                tipText.gameObject.SetActive(true); // Show tip
             HandleInitialPhase();
         }
         else
         {
+            if (tipText != null)
+                tipText.gameObject.SetActive(false); // Hide tip after game starts
             HandleGameplayPhase();
         }
     }
 
     private void HandleInitialPhase()
     {
-        // 长按鼠标左键生成小人
-        if (Input.GetMouseButton(0)) // 鼠标左键按下
+        // Hold left mouse button to spawn players
+        if (Input.GetMouseButton(0)) // Left mouse button pressed
         {
-            if (players.Count < MaxPlayerCount && Time.time - lastSpawnTime >= spawnCooldown) // 检查数量和生成间隔
+            if (players.Count < MaxPlayerCount && Time.time - lastSpawnTime >= spawnCooldown) // Check count and interval
             {
                 SpawnPlayer();
-                lastSpawnTime = Time.time; // 更新上次生成时间
+                lastSpawnTime = Time.time; // Update last spawn time
             }
         }
 
-        // 达到最大数量自动开始游戏
+        // Automatically start game when reaching max count
         if (players.Count >= MaxPlayerCount)
         {
             isGameStarted = true;
             initialPlayerCount = players.Count;
         }
-        // 松开鼠标左键，游戏正式开始
-        else if (Input.GetMouseButtonUp(0)) // 鼠标左键松开
+        // Release left mouse button to officially start the game
+        else if (Input.GetMouseButtonUp(0)) // Left mouse button released
         {
             isGameStarted = true;
             initialPlayerCount = players.Count;
@@ -90,7 +96,7 @@ public class PlayerManager : MonoBehaviour
                 player.TryJump();
         }
 
-        // 在每帧给所有小人一个指向中心的微小力
+        // Apply a small force towards the center to all players every frame
         ApplyCenterForceToPlayers();
     }
 
@@ -100,17 +106,17 @@ public class PlayerManager : MonoBehaviour
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
         worldPosition.z = 0;
 
-        // 只检测ReleaseLimitation层
+        // Only detect ReleaseLimitation layer
         int layerMask = LayerMask.GetMask("ReleaseLimitation");
         RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero, 0f, layerMask);
 
         if (hit.collider == null)
         {
-            // 没有点在正确的square上，直接返回
+            // Not clicked on the correct square, just return
             return;
         }
 
-        // 不加偏移，直接用 worldPosition
+        // No offset, use worldPosition directly
         GameObject newPlayer = Instantiate(basePlayerPrefab[0], worldPosition, Quaternion.identity);
 
         int randomIndex = Random.Range(0, playerOverrideControllers.Length);
@@ -121,7 +127,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Animator 或 Override Controller 未正确设置");
+            Debug.LogWarning("Animator or Override Controller not set correctly");
         }
 
         Register(newPlayer.GetComponent<PlayerMovement>());
@@ -137,7 +143,7 @@ public class PlayerManager : MonoBehaviour
 
     public static void CheckAllPlayersDead()
     {
-        // 检查是否所有玩家都死亡
+        // Check if all players are dead
         bool allDead = players.TrueForAll(player => !player.isAlive);
         if (allDead)
         {
@@ -166,7 +172,7 @@ public class PlayerManager : MonoBehaviour
     public static void RestoreAllPlayersScale()
     {
         Vector3 originalScale = new Vector3(2.77f, 2.77f, 4.05f);
-        players = GetAlivePlayers(); // 确保只对存活的小人进行操作
+        players = GetAlivePlayers(); // Ensure only alive players are operated on
         foreach (var player in players)
         {
             if (player != null)
@@ -176,13 +182,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    // 给所有小人施加指向中心的力
+    // Apply a force towards the center to all players
     private void ApplyCenterForceToPlayers()
     {
         var alivePlayers = GetAlivePlayers();
         if (alivePlayers.Count == 0) return;
 
-        // 计算所有小人的中心点
+        // Calculate the center point of all players
         Vector3 center = Vector3.zero;
         foreach (var player in alivePlayers)
         {
@@ -190,8 +196,8 @@ public class PlayerManager : MonoBehaviour
         }
         center /= alivePlayers.Count;
 
-        // 给每个小人施加一个指向中心的力
-        float forceStrength = 2f; // 力的大小可以调整
+        // Apply a force towards the center to each player
+        float forceStrength = 2f; // Force magnitude can be adjusted
         foreach (var player in alivePlayers)
         {
             Rigidbody2D rb = player.GetComponent<Rigidbody2D>();

@@ -4,12 +4,12 @@ public class DifficultyManager : MonoBehaviour
 {
     public static DifficultyManager Instance;
 
-    private int difficultyLevel = 1; // 初始难度
-    private float initialThreshold = 3f; // 初始难度阈值
-    private float thresholdDecayRate = 0.1f; // 每通过一个房间降低的阈值
-    private float difficultyThreshold; // 当前难度阈值
-    private int passedRoomCount = 1; // 已通过的房间数，初始为1避免除以0
-    private int initialPlayerCount; // 记录初始玩家数
+    private int difficultyLevel = 1; // Initial difficulty
+    private float initialThreshold = 3f; // Initial difficulty threshold
+    private float thresholdDecayRate = 0.1f; // Threshold decay rate per room
+    private float difficultyThreshold; // Current difficulty threshold
+    private int passedRoomCount = 1; // Number of rooms passed, start from 1 to avoid division by zero
+    private int initialPlayerCount; // Record initial player count
 
     private void Awake()
     {
@@ -18,7 +18,7 @@ public class DifficultyManager : MonoBehaviour
             Instance = this;
         }
 
-        // 初始化难度阈值
+        // Initialize difficulty threshold
         difficultyThreshold = initialThreshold;
     }
 
@@ -27,7 +27,7 @@ public class DifficultyManager : MonoBehaviour
         if (initialPlayerCount == 0 && PlayerManager.Instance != null && PlayerManager.Instance.isGameStarted)
         {
             initialPlayerCount = PlayerManager.GetInitialPlayerCount();
-            //Debug.Log($"初始玩家数: {initialPlayerCount}");
+            //Debug.Log($"Initial player count: {initialPlayerCount}");
         }
         AdjustDifficulty();
     }
@@ -36,48 +36,42 @@ public class DifficultyManager : MonoBehaviour
     {
         passedRoomCount++;
 
-        // 动态调整难度阈值
+        // Dynamically adjust difficulty threshold
         difficultyThreshold = Mathf.Max(0.3f, initialThreshold - passedRoomCount * thresholdDecayRate);
 
         int alivePlayers = PlayerManager.GetAlivePlayers().Count;
         float survivalRatio = (float)alivePlayers / Mathf.Max(1, initialPlayerCount);
 
-        Debug.Log($"[难度调试] 当前房间数: {passedRoomCount - 1}，存活玩家数: {alivePlayers}，存活率: {survivalRatio:P1}，当前难度: {difficultyLevel}");
+        Debug.Log($"[Difficulty Debug] Current room: {passedRoomCount - 1}, Alive players: {alivePlayers}, Survival rate: {survivalRatio:P1}, Current difficulty: {difficultyLevel}");
     }
 
     private void AdjustDifficulty()
     {
         int alivePlayers = PlayerManager.GetAlivePlayers().Count;
 
-        // 1. 基础难度分段
+        // 1. Base difficulty segmentation
         int baseDifficulty = 1;
-        if (passedRoomCount > 20) baseDifficulty = 3;
-        else if (passedRoomCount > 14) baseDifficulty = 3;
-        else if (passedRoomCount > 7) baseDifficulty = 2;
+        if (passedRoomCount > 7) baseDifficulty = 3;
+        else if (passedRoomCount > 4) baseDifficulty = 2;
 
-        // 2. 存活率影响因素
+        // 2. Survival rate and alive player count
         float survivalRatio = (float)alivePlayers / Mathf.Max(1, initialPlayerCount);
 
-        if (passedRoomCount <= 7 && survivalRatio > 1.5f)
-        {
-            difficultyLevel = 3;
-            return;
-        }
+        // 3. Use base difficulty as main, survival rate and alive count as fine-tuning
+        int adjustedDifficulty = baseDifficulty;
 
-        // 3. 30关以后，难度下限锁定为3
-        if (passedRoomCount > 20)
-        {
+        if (survivalRatio > 1.6f || alivePlayers > 20)
+            adjustedDifficulty = Mathf.Min(3, baseDifficulty + 2);
+        else if (survivalRatio > 0.7f || alivePlayers > 10)
+            adjustedDifficulty = Mathf.Min(3, baseDifficulty + 1);
+        else if (survivalRatio < 0.3f || alivePlayers < 3)
+            adjustedDifficulty = Mathf.Max(1, baseDifficulty - 1);
+
+        // 4. If room count exceeds 15, lock difficulty to 3
+        if (passedRoomCount > 15)
             difficultyLevel = 3;
-        }
         else
-        {
-            if (survivalRatio < 0.3f)
-                difficultyLevel = Mathf.Max(1, baseDifficulty - 1); // 存活率低，降低难度
-            else if (survivalRatio > 0.7f)
-                difficultyLevel = Mathf.Min(3, baseDifficulty + 1); // 存活率高，提升难度
-            else
-                difficultyLevel = baseDifficulty; // 其余情况保持基础难度
-        }
+            difficultyLevel = adjustedDifficulty;
     }
 
     public int GetDifficultyLevel()

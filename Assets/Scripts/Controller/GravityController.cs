@@ -16,17 +16,17 @@ public class GravityController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
         {
-            // 旋转相机
+            // Rotate the camera
             cameraFollow.RotateCamera();
 
-            // 旋转全局重力方向
-            RotateGlobalGravity(1); // 逆时针旋转 90 度
+            // Rotate the global gravity direction
+            RotateGlobalGravity(1); // Rotate 90 degrees counterclockwise
         }
     }
 
     private void RotateGlobalGravity(float direction)
     {
-        // 旋转全局重力方向
+        // Rotate the global gravity direction
         Physics2D.gravity = Quaternion.Euler(0, 0, 90 * direction) * Physics2D.gravity;
 
         foreach (var player in PlayerManager.GetAlivePlayers())

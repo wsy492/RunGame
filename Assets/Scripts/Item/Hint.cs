@@ -15,7 +15,7 @@ public class Hint : MonoBehaviour
     {
         if (rend != null && animator != null)
         {
-            // 当Hint在摄像机视野内时，播放动画
+            // Play animation when Hint is visible in the camera view
             animator.SetBool("Play", rend.isVisible);
         }
     }

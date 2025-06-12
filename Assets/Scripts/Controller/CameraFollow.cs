@@ -5,19 +5,19 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Vector3 offset = new Vector3(0f, 0f, -10f);
-    [SerializeField] private float smoothTime = 0.05f; // 平滑时间
-    [SerializeField] private float rotationSpeed = 200f; // 相机旋转速度
-    [SerializeField] private float minOrthographicSize = 2f; // 摄像机最小范围
-    [SerializeField] private float maxOrthographicSize = 20f; // 摄像机最大范围
-    [SerializeField] private float sizePadding = 2f; // 额外的边距
+    [SerializeField] private float smoothTime = 0.05f; // Smoothing time
+    [SerializeField] private float rotationSpeed = 200f; // Camera rotation speed
+    [SerializeField] private float minOrthographicSize = 2f; // Minimum camera orthographic size
+    [SerializeField] private float maxOrthographicSize = 30f; // Maximum camera orthographic size
+    [SerializeField] private float sizePadding = 2f; // Extra padding for camera size
 
     private Vector3 velocity = Vector3.zero;
-    private bool isRotating = false; // 是否正在旋转
-    private Quaternion targetRotation; // 目标旋转
-    private Camera cam; // 摄像机组件
+    private bool isRotating = false; // Is the camera rotating
+    private Quaternion targetRotation; // Target rotation
+    private Camera cam; // Camera component
     private bool isZooming = false;
     private float zoomLockTimer = 0f;
-    private float zoomLockDuration = 5f; // 缩放后锁定5秒
+    private float zoomLockDuration = 5f; // Lock zoom for 5 seconds after zooming
     private float shakeDuration = 0f;
     private float shakeMagnitude = 0.3f;
     private float shakeFadeSpeed = 2f;
@@ -26,8 +26,8 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
-        targetRotation = transform.rotation; // 初始化目标旋转
-        cam = GetComponent<Camera>(); // 获取摄像机组件
+        targetRotation = transform.rotation; // Initialize target rotation
+        cam = GetComponent<Camera>(); // Get camera component
         originalPos = transform.localPosition;
     }
 
@@ -40,7 +40,7 @@ public class CameraFollow : MonoBehaviour
         if (players.Count == 0)
             return;
 
-        // 获取所有玩家的最大速度
+        // Get the maximum speed of all players
         float maxPlayerSpeed = 0f;
         foreach (var player in players)
         {
@@ -53,20 +53,20 @@ public class CameraFollow : MonoBehaviour
             }
         }
 
-        // 跟随小人中心点
+        // Follow the center point of all players
         Vector3 center = GetCenterPoint(players);
         Vector3 targetPosition = center + offset;
 
-        // 动态调整smoothTime，速度越快，smoothTime越小
+        // Dynamically adjust smoothTime: the faster the speed, the smaller the smoothTime
         float minSmoothTime = 0.01f;
         float maxSmoothTime = 0.15f;
-        float speedThreshold = 10f; // 你可以根据实际调整
+        float speedThreshold = 10f; // Adjust as needed
         float t = Mathf.Clamp01(maxPlayerSpeed / speedThreshold);
         float dynamicSmoothTime = Mathf.Lerp(maxSmoothTime, minSmoothTime, t);
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, dynamicSmoothTime);
 
-        // 5秒内锁定缩放，不自动调整
+        // Lock zoom for 5 seconds, do not auto adjust during this period
         if (isZooming)
         {
             zoomLockTimer -= Time.fixedDeltaTime;
@@ -80,7 +80,7 @@ public class CameraFollow : MonoBehaviour
             AdjustCameraSize(players);
         }
 
-        // 平滑旋转相机
+        // Smoothly rotate the camera
         if (isRotating)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
@@ -93,7 +93,7 @@ public class CameraFollow : MonoBehaviour
 
         Vector3 targetPos = GetCenterPoint(players) + offset;
 
-        // 2. 计算抖动偏移
+        // 2. Calculate shake offset
         if (shakeDuration > 0)
         {
             shakeOffset = Random.insideUnitSphere * shakeMagnitude;
@@ -109,7 +109,7 @@ public class CameraFollow : MonoBehaviour
             shakeOffset = Vector3.zero;
         }
 
-        // 3. 应用抖动
+        // 3. Apply shake
         transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, smoothTime) + shakeOffset;
     }
 
@@ -118,74 +118,16 @@ public class CameraFollow : MonoBehaviour
         shakeDuration = duration;
         shakeMagnitude = magnitude;
     }
-    // private Vector3 GetCenterPoint(List<PlayerMovement> players)
-    // {
-    //     if (players.Count == 1)
-    //         return players[0].transform.position;
-
-    //     // 计算所有玩家的中心点
-    //     Bounds bounds = new Bounds(players[0].transform.position, Vector3.zero);
-    //     for (int i = 1; i < players.Count; i++)
-    //     {
-    //         bounds.Encapsulate(players[i].transform.position);
-    //     }
-
-    //     // 忽略距离中心点过远的小人
-    //     float maxDistance = 10f; // 距离阈值
-    //     Vector3 center = bounds.center;
-    //     List<PlayerMovement> closePlayers = players.FindAll(player =>
-    //         Vector3.Distance(player.transform.position, center) <= maxDistance);
-
-    //     if (closePlayers.Count == 0)
-    //         return center; // 如果没有小人满足条件，返回原中心点
-
-    //     // 重新计算中心点
-    //     bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
-    //     for (int i = 1; i < closePlayers.Count; i++)
-    //     {
-    //         bounds.Encapsulate(closePlayers[i].transform.position);
-    //     }
-
-    //     return bounds.center;
-    // }
-
-    // private void AdjustCameraSize(List<PlayerMovement> players)
-    // {
-    //     if (cam.orthographic)
-    //     {
-    //         // 计算所有玩家的中心点
-    //         Vector3 center = GetCenterPoint(players);
-
-    //         // 忽略距离中心点过远的小人
-    //         float maxDistance = 10f; // 距离阈值
-    //         List<PlayerMovement> closePlayers = players.FindAll(player =>
-    //             Vector3.Distance(player.transform.position, center) <= maxDistance);
-
-    //         if (closePlayers.Count == 0)
-    //             return; // 如果没有小人满足条件，不调整摄像机大小
-
-    //         // 计算边界
-    //         Bounds bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
-    //         foreach (var player in closePlayers)
-    //         {
-    //             bounds.Encapsulate(player.transform.position);
-    //         }
-
-    //         // 根据边界的大小调整摄像机的正交大小
-    //         float requiredSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f + sizePadding;
-    //         cam.orthographicSize = Mathf.Clamp(requiredSize, minOrthographicSize, maxOrthographicSize);
-    //     }
-    // }
 
     private void AdjustCameraSize(List<PlayerMovement> players)
     {
         if (cam.orthographic)
         {
-            // 计算所有玩家的中心点
+            // Calculate the center point of all players
             Vector3 center = GetCenterPoint(players);
 
-            // 忽略距离中心点过远的小人，并将其移除
-            float maxDistance = 15f; // 距离阈值
+            // Ignore players too far from the center and remove them
+            float maxDistance = 15f; // Distance threshold
             List<PlayerMovement> closePlayers = new List<PlayerMovement>();
             foreach (var player in players)
             {
@@ -195,53 +137,27 @@ public class CameraFollow : MonoBehaviour
                 }
                 else
                 {
-                    // 如果小人距离中心点过远，直接移除或标记为死亡
-                    Debug.Log($"小人 {player.name} 距离过远，被移除");
-                    PlayerManager.Unregister(player); // 从玩家管理器中移除
-                    Destroy(player.gameObject); // 销毁小人对象
+                    // If a player is too far from the center, remove or mark as dead
+                    Debug.Log($"Player {player.name} is too far and has been removed");
+                    PlayerManager.Unregister(player); // Remove from player manager
+                    Destroy(player.gameObject); // Destroy player object
                 }
             }
 
             if (closePlayers.Count == 0)
-                return; // 如果没有小人满足条件，不调整摄像机大小
-                        // 计算边界
+                return; // If no players meet the condition, do not adjust camera size
+
+            // Calculate bounds
             Bounds bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
             foreach (var player in closePlayers)
             {
                 bounds.Encapsulate(player.transform.position);
             }
 
-            // 获取重力方向
-            Vector2 gravityDir = Physics2D.gravity.normalized;
-            // 获取垂直于重力的方向
-            Vector2 perpDir = new Vector2(-gravityDir.y, gravityDir.x);
-
-            // 投影到重力方向和垂直方向，分别得到两个方向的长度
-            float sizeGravity = Mathf.Abs(Vector2.Dot(new Vector2(bounds.size.x, bounds.size.y), gravityDir));
-            float sizePerp = Mathf.Abs(Vector2.Dot(new Vector2(bounds.size.x, bounds.size.y), perpDir));
-
-            // 在垂直于重力方向上加大padding
-            float perpPadding = sizePadding + 4f; // 这里2.5f可以自己调，越大视野越宽
-            float gravityPadding = sizePadding;
-
-            // 计算最终需要的正交大小
-            float requiredSize = Mathf.Max(
-                sizeGravity / 2f + gravityPadding,
-                sizePerp / 2f + perpPadding
-            );
+            // Adjust camera orthographic size based on bounds
+            float requiredSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f + sizePadding;
             cam.orthographicSize = Mathf.Clamp(requiredSize, minOrthographicSize, maxOrthographicSize);
         }
-        //     // 计算边界
-        //     Bounds bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
-        //     foreach (var player in closePlayers)
-        //     {
-        //         bounds.Encapsulate(player.transform.position);
-        //     }
-
-        //     // 根据边界的大小调整摄像机的正交大小
-        //     float requiredSize = Mathf.Max(bounds.size.x, bounds.size.y) / 2f + sizePadding;
-        //     cam.orthographicSize = Mathf.Clamp(requiredSize, minOrthographicSize, maxOrthographicSize);
-        // }
     }
 
     private Vector3 GetCenterPoint(List<PlayerMovement> players)
@@ -249,23 +165,23 @@ public class CameraFollow : MonoBehaviour
         if (players.Count == 1)
             return players[0].transform.position;
 
-        // 计算所有玩家的中心点
+        // Calculate the center point of all players
         Bounds bounds = new Bounds(players[0].transform.position, Vector3.zero);
         for (int i = 1; i < players.Count; i++)
         {
             bounds.Encapsulate(players[i].transform.position);
         }
 
-        // 忽略距离中心点过远的小人
-        float maxDistance = 10f; // 距离阈值
+        // Ignore players too far from the center
+        float maxDistance = 10f; // Distance threshold
         Vector3 center = bounds.center;
         List<PlayerMovement> closePlayers = players.FindAll(player =>
             Vector3.Distance(player.transform.position, center) <= maxDistance);
 
         if (closePlayers.Count == 0)
-            return center; // 如果没有小人满足条件，返回原中心点
+            return center; // If no players meet the condition, return the original center
 
-        // 重新计算中心点
+        // Recalculate center point
         bounds = new Bounds(closePlayers[0].transform.position, Vector3.zero);
         for (int i = 1; i < closePlayers.Count; i++)
         {
@@ -277,7 +193,7 @@ public class CameraFollow : MonoBehaviour
 
     public void RotateCamera()
     {
-        // 设置目标旋转为逆时针旋转 90 度
+        // Set the target rotation to rotate 90 degrees counterclockwise
         targetRotation *= Quaternion.Euler(0, 0, 90);
         isRotating = true;
     }

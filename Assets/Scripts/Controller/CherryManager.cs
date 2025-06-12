@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class CherryManager : MonoBehaviour
 {
     public static int totalCherries = 0;
-    public Sprite cherryIcon; // Cherry 图标
-    public Text cherryCountText; // 显示数量的 Text 组件
+    public Sprite cherryIcon; // Cherry icon
+    public Text cherryCountText; // Text component to display the amount
 
     public static CherryManager Instance;
 
@@ -24,7 +24,7 @@ public class CherryManager : MonoBehaviour
 
     private void Update()
     {
-        // 动态更新 Cherry 数量
+        // Dynamically update Cherry count
         if (cherryCountText != null)
         {
             cherryCountText.text = totalCherries.ToString();

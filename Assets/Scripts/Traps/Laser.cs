@@ -11,7 +11,7 @@ public class Laser : MonoBehaviour
 
     void Update()
     {
-        // 只要激光在摄像机视野内，按下Shift就销毁激光
+        // As long as the laser is visible in the camera view, pressing Shift will destroy the laser
         if (rend != null && rend.isVisible)
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
@@ -23,12 +23,12 @@ public class Laser : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // 只有激光在摄像机视野内才生效
+        // The laser only works when it is visible in the camera view
         if (rend != null && rend.isVisible)
         {
             if (other.CompareTag("Player"))
             {
-                // 获取PlayerLife脚本并调用死亡方法
+                // Get the PlayerLife script and call the death method
                 PlayerLife playerLife = other.GetComponent<PlayerLife>();
                 if (playerLife != null)
                 {

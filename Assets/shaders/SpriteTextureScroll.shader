@@ -5,6 +5,7 @@ Shader "Custom/SpriteTextureScroll"
         _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
         _Offset ("Offset", Vector) = (0,0,0,0)
+        _RendererColor ("Renderer Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -38,6 +39,7 @@ Shader "Custom/SpriteTextureScroll"
             float4 _MainTex_ST;
             float4 _Offset;
             fixed4 _Color;
+            fixed4 _RendererColor; 
 
             v2f vert (appdata_t v)
             {
@@ -48,10 +50,12 @@ Shader "Custom/SpriteTextureScroll"
             }
 
             fixed4 frag (v2f i) : SV_Target
-            {
-                fixed4 c = tex2D(_MainTex, i.uv) * _Color;
-                return c;
-            }
+{
+    fixed4 c = tex2D(_MainTex, i.uv) * _RendererColor;
+    // 用 RendererColor 的 alpha 覆盖
+    c.a = tex2D(_MainTex, i.uv).a * _RendererColor.a;
+    return c;
+}
             ENDCG
         }
     }

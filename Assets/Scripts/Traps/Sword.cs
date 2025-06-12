@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f; // 剑的飞行速度
+    [SerializeField] private float speed = 5f; // Sword flying speed
 
     void Start()
     {
-        Destroy(gameObject, 5f); // 5秒后自动销毁
+        Destroy(gameObject, 5f); // Auto destroy after 5 seconds
     }
 
     void Update()
     {
-        // 沿自身朝向匀速移动
+        // Move forward at a constant speed along its own direction
         transform.Translate(Vector3.right * speed * Time.deltaTime, Space.Self);
     }
 
-    // 检测玩家碰撞
+    // Detect player collision
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -26,6 +26,6 @@ public class Sword : MonoBehaviour
                 playerLife.Die();
             }
         }
-        // 不销毁自己，不受任何影响
+        // Do not destroy itself, not affected by anything
     }
 }

@@ -12,27 +12,28 @@ public class RoomExitTrigger : MonoBehaviour
             triggered = true;
             if (levelGenerator != null)
             {
+                // Get reference to the Score component
                 var score = FindObjectOfType<Score>();
                 if (score != null)
                 {
-                    // 直接加上当前房间的分数
+                    // Directly add the score of the current room
                     var thisRoom = transform.parent.GetComponent<RoomModule>();
-                    score.totalScore += thisRoom.score;
+                    Score.totalScore += thisRoom.score; // Modified here
                     score.lastRoom = thisRoom;
                     score.currentRoom = thisRoom;
                 }
 
                 DifficultyManager.Instance.IncrementPassedRoomCount();
 
-                // 先更新当前房间
+                // First update the current room
                 levelGenerator.SetCurrentRoom(transform.parent.GetComponent<RoomModule>());
-                // 再生成新房间
+                // Then generate a new room
                 levelGenerator.SpawnNextRoom();
                 gameObject.SetActive(false);
             }
             else
             {
-                Debug.LogError($"Exit触发器上的LevelGenerator为空: {gameObject.name}, ID: {gameObject.GetInstanceID()}");
+                Debug.LogError($"LevelGenerator is null on Exit trigger: {gameObject.name}, ID: {gameObject.GetInstanceID()}");
             }
         }
     }

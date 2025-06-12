@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class AddPlayerItem : MonoBehaviour
 {
-    [SerializeField] private GameObject playerPrefab; // 小人预制体
-    [SerializeField] private Vector2 spawnOffset = new Vector2(5f, 10f); // 生成位置的偏移量，x 和 y 都有随机范围
-    [SerializeField] private LayerMask Ground; // 用于检测障碍物的图层
-    [SerializeField] private float spawnCheckRadius = 0.5f; // 检测生成位置的半径
+    [SerializeField] private GameObject playerPrefab; // Player prefab
+    [SerializeField] private Vector2 spawnOffset = new Vector2(5f, 10f); // Offset range for spawn position (random x and y)
+    [SerializeField] private LayerMask Ground; // Layer for obstacle detection
+    [SerializeField] private float spawnCheckRadius = 0.5f; // Radius for checking spawn position
 
-    [SerializeField] private Collider2D increaseItemArea; // 生成区域的 Collider
+    [SerializeField] private Collider2D increaseItemArea; // Collider for spawn area
 
     [SerializeField] private RuntimeAnimatorController[] playerOverrideControllers;
 
@@ -15,14 +15,14 @@ public class AddPlayerItem : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            // 随机生成 2 到 8 个小人
+            // Randomly spawn 2 to 8 players
             int playerCount = Random.Range(2, 9);
             for (int i = 0; i < playerCount; i++)
             {
                 SpawnNewPlayer(collision.transform.position);
             }
 
-            // 销毁道具
+            // Destroy the item
             Destroy(gameObject);
         }
     }
@@ -30,15 +30,15 @@ public class AddPlayerItem : MonoBehaviour
     private void SpawnNewPlayer(Vector3 basePosition)
     {
         Vector3 spawnPosition;
-        int maxAttempts = 50; // 最大尝试次数
+        int maxAttempts = 50; // Maximum attempts
         int attempts = 0;
         bool foundValidPosition = false;
 
-        // 获取 IncreaseItemArea 的边界
+        // Get the bounds of IncreaseItemArea
         Bounds areaBounds = increaseItemArea.bounds;
 
-        // 获取玩家 Collider 尺寸
-        Vector2 checkSize = new Vector2(2.77f, 2.77f); // 默认尺寸（后面如果已存在小人，可以从它身上动态获取）
+        // Get player collider size
+        Vector2 checkSize = new Vector2(2.77f, 2.77f); // Default size (can be dynamically obtained from an existing player)
 
         var existPlayer = FindObjectOfType<PlayerMovement>();
         if (existPlayer != null)
@@ -52,12 +52,12 @@ public class AddPlayerItem : MonoBehaviour
 
         do
         {
-            // 随机生成位置，限制在 IncreaseItemArea 的边界内
+            // Randomly generate position within IncreaseItemArea bounds
             float randomX = Random.Range(areaBounds.min.x, areaBounds.max.x);
             float randomY = Random.Range(areaBounds.min.y, areaBounds.max.y);
             spawnPosition = new Vector3(randomX, randomY, basePosition.z);
 
-            // 检查生成位置是否有效（没有与障碍物重叠）
+            // Check if the spawn position is valid (not overlapping with obstacles)
             if (!Physics2D.OverlapBox(spawnPosition, checkSize, 0f, Ground))
             {
                 foundValidPosition = true;
@@ -70,11 +70,11 @@ public class AddPlayerItem : MonoBehaviour
 
         if (!foundValidPosition)
         {
-            Debug.LogWarning("无法找到合适的生成位置，放弃生成小人");
+            Debug.LogWarning("Could not find a valid spawn position, giving up spawning player");
             return;
         }
 
-        // 保留现有的 localScale 逻辑
+        // Keep the existing localScale logic
         float currentZRotation = 0f;
         Vector3 currentScale = Vector3.one;
 
@@ -84,11 +84,11 @@ public class AddPlayerItem : MonoBehaviour
             currentScale = existPlayer.transform.localScale;
         }
 
-        // 生成小人并设置朝向和缩放
+        // Instantiate player and set rotation and scale
         GameObject newPlayer = Instantiate(playerPrefab, spawnPosition, Quaternion.Euler(0, 0, currentZRotation));
         newPlayer.transform.localScale = currentScale;
 
-        // 随机赋值不同样式
+        // Randomly assign different styles
         if (playerOverrideControllers != null && playerOverrideControllers.Length > 0)
         {
             int randomIndex = Random.Range(0, playerOverrideControllers.Length);
@@ -99,15 +99,15 @@ public class AddPlayerItem : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Animator 未正确设置，无法更换样式");
+                Debug.LogWarning("Animator is not set correctly, cannot change style");
             }
         }
         else
         {
-            Debug.LogWarning("playerOverrideControllers 未设置");
+            Debug.LogWarning("playerOverrideControllers is not set");
         }
 
-        // 注册新小人到 PlayerManager
+        // Register the new player to PlayerManager
         PlayerManager.Register(newPlayer.GetComponent<PlayerMovement>());
     }
 

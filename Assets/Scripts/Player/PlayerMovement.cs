@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections; // 使用协程需要引入
+using System.Collections; // Required for coroutines
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,30 +15,30 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float maxSpeed = 10f;
 
-    // 水域中的属性
+    // Properties in water
     [SerializeField] private float waterGravityScale = 4f;
     [SerializeField] private float waterMoveSpeed = 4f;
     [SerializeField] private float waterMaxSpeed = 7f;
 
-    // 用于存储原始属性
+    // Store original properties
     private float originalGravityScale;
     private float originalMoveSpeed;
     private float originalMaxSpeed;
 
-    // 判断是否在水中
+    // Check if in water
     private bool isInWater = false;
 
     public bool isAlive = true;
     public bool canJump = true;
     private Coroutine speedEffectCoroutine;
 
-    // 新增：吐泡泡效果相关
-    [Header("水下效果 (Water Effects)")] // 在Inspector中添加一个标题，方便区分
-    [SerializeField] private GameObject bubblePrefab; // 将你的泡泡预制体拖拽到这里
-    [SerializeField] private Transform bubbleSpawnPoint; // 泡泡生成的位置 (可选, 可以是玩家的一个子对象)
-    [SerializeField] private float bubbleSpawnInterval = 0.5f; // 生成泡泡的间隔时间 (秒)
+    // Bubble effect
+    [Header("Water Effects")]
+    [SerializeField] private GameObject bubblePrefab; // Drag your bubble prefab here
+    [SerializeField] private Transform bubbleSpawnPoint; // Bubble spawn position (optional, can be a child of the player)
+    [SerializeField] private float bubbleSpawnInterval = 0.5f; // Bubble spawn interval (seconds)
 
-    private Coroutine bubbleCoroutine; // 用于控制泡泡生成的协程
+    private Coroutine bubbleCoroutine; // Coroutine for bubble spawning
 
     private enum MovementState
     {
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         PlayerManager.Register(this);
-        // 如果没有指定泡泡生成点，默认使用玩家自身的位置
+        // If no bubble spawn point is specified, use the player's own position
         if (bubbleSpawnPoint == null)
         {
             bubbleSpawnPoint = transform;
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDestroy()
     {
         PlayerManager.Unregister(this);
-        StopBubbleEffect(); // 确保对象销毁时停止协程
+        StopBubbleEffect(); // Stop coroutine when object is destroyed
     }
 
     private void Update()
@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 gravityDir = Physics2D.gravity.normalized;
         Vector2 moveDir = new Vector2(-gravityDir.y, gravityDir.x);
-        // 当前实际使用的移动速度 (考虑是否在水中)
+        // Current effective move speed (considering if in water)
         float currentEffectiveMoveSpeed = isInWater ? waterMoveSpeed : this.moveSpeed;
         float targetHorizontalSpeed = direction * currentEffectiveMoveSpeed;
 
@@ -116,11 +116,30 @@ public class PlayerMovement : MonoBehaviour
     public void TryJump()
     {
         if (!canJump) return;
-        Debug.Log("尝试跳跃");
+        Debug.Log("Try to jump");
+
+        if (jumpSound != null)
+            jumpSound.Play(); // Play jump sound
 
         rb.linearVelocity = Vector2.zero;
-        Vector2 jumpDirection = -Physics2D.gravity.normalized;
-        rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
+
+        Vector2 jumpDirection;
+        float force = jumpForce;
+
+        if (isInWater)
+        {
+            Debug.Log("Jump in water");
+            // Jump in water, direction is the same as on land, force can be reduced (e.g. 0.7x), or not
+            jumpDirection = -Physics2D.gravity.normalized;
+            force = jumpForce * 0.6f; // Less force in water
+        }
+        else
+        {
+            jumpDirection = -Physics2D.gravity.normalized;
+            force = jumpForce;
+        }
+
+        rb.AddForce(jumpDirection * force, ForceMode2D.Impulse);
 
         canJump = false;
         Invoke(nameof(Recevory_jump), 1f);
@@ -153,18 +172,18 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.idle;
         }
 
-        // 注意：这里的垂直速度判断是基于世界坐标系的Y轴。
-        // 如果你的游戏重力会旋转，这里的跳跃/下落状态判断可能需要调整为基于当前重力方向的速度分量。
+        // Note: The vertical speed judgment here is based on the Y axis of the world coordinate system.
+        // If your game gravity rotates, the jump/fall state judgment here may need to be adjusted to the velocity component along the current gravity direction.
         float verticalVelocityAlongGravity = Vector2.Dot(rb.linearVelocity, -Physics2D.gravity.normalized);
-        if (verticalVelocityAlongGravity > 0.1f) // 向上运动（相对于反重力方向）
+        if (verticalVelocityAlongGravity > 0.1f) // Moving up (relative to anti-gravity direction)
         {
             state = MovementState.jumping;
         }
-        else if (verticalVelocityAlongGravity < -0.1f) // 向下运动（相对于反重力方向，即掉落）
+        else if (verticalVelocityAlongGravity < -0.1f) // Moving down (relative to anti-gravity direction, i.e. falling)
         {
             state = MovementState.falling;
         }
-        // 如果重力方向是标准的 (0, -g), 那么 rb.linearVelocity.y > 0.1f 就是跳跃
+        // If gravity direction is standard (0, -g), then rb.linearVelocity.y > 0.1f is jumping
         // if (Physics2D.gravity.y < 0 && rb.linearVelocity.y > 0.1f)
         // {
         //     state = MovementState.jumping;
@@ -173,27 +192,27 @@ public class PlayerMovement : MonoBehaviour
         // {
         //     state = MovementState.falling;
         // }
-        // // 你可能需要为其他重力方向添加更复杂的判断逻辑
+        // You may need to add more complex logic for other gravity directions
 
         animator.SetInteger("state", (int)state);
     }
 
     private void FixedUpdate()
     {
-        // UpdateAnimation(); // 已经在 Update 中调用了
+        // UpdateAnimation(); // Already called in Update
 
         if (rb != null)
         {
             Vector2 gravityDir = Physics2D.gravity.normalized;
             Vector2 moveDir = new Vector2(-gravityDir.y, gravityDir.x);
             float gravitySpeed = Vector2.Dot(rb.linearVelocity, gravityDir);
-            float currentMoveComponentSpeed = Vector2.Dot(rb.linearVelocity, moveDir); // 清晰起见重命名
+            float currentMoveComponentSpeed = Vector2.Dot(rb.linearVelocity, moveDir); // Renamed for clarity
 
             bool changed = false;
-            // 使用当前环境下的最大速度 (水中或陆地)
+            // Use the maximum speed for the current environment (water or land)
             float currentEffectiveMaxSpeed = isInWater ? waterMaxSpeed : this.maxSpeed;
 
-            if (Mathf.Abs(gravitySpeed) > currentEffectiveMaxSpeed) // 最大速度应该应用于整体速度还是分量？这里应用于分量
+            if (Mathf.Abs(gravitySpeed) > currentEffectiveMaxSpeed) // Should max speed apply to total speed or component? Here it applies to component
             {
                 gravitySpeed = Mathf.Sign(gravitySpeed) * currentEffectiveMaxSpeed;
                 changed = true;
@@ -214,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isAlive = false;
         gameObject.SetActive(false);
-        StopBubbleEffect(); // 死亡时停止吐泡泡
+        StopBubbleEffect(); // Stop bubble effect on death
     }
 
     public void RotateGravity(float direction)
@@ -233,12 +252,12 @@ public class PlayerMovement : MonoBehaviour
         {
             isInWater = true;
             rb.gravityScale = waterGravityScale;
-            // moveSpeed 和 maxSpeed 现在会在 Move() 和 FixedUpdate() 中根据 isInWater 动态使用
-            // 所以这里的直接赋值如果那些方法总是检查 isInWater，则不那么关键。
-            // 但为了清晰或其他系统依赖，显式设置也可以。
-            // this.moveSpeed = waterMoveSpeed; // 这会覆盖基础的 moveSpeed
-            // this.maxSpeed = waterMaxSpeed;   // 这会覆盖基础的 maxSpeed
-            StartBubbleEffect(); // 进入水中，开始吐泡泡
+            // moveSpeed and maxSpeed are now dynamically used in Move() and FixedUpdate() based on isInWater
+            // So direct assignment here is not critical if those methods always check isInWater.
+            // But for clarity or other system dependencies, explicit assignment is also fine.
+            // this.moveSpeed = waterMoveSpeed; // This would overwrite the base moveSpeed
+            // this.maxSpeed = waterMaxSpeed;   // This would overwrite the base maxSpeed
+            StartBubbleEffect(); // Start bubble effect when entering water
             //Debug.Log("Entered Water");
         }
     }
@@ -251,15 +270,15 @@ public class PlayerMovement : MonoBehaviour
             rb.gravityScale = originalGravityScale;
             // this.moveSpeed = originalMoveSpeed;
             // this.maxSpeed = originalMaxSpeed;
-            StopBubbleEffect(); // 离开水中，停止吐泡泡
+            StopBubbleEffect(); // Stop bubble effect when exiting water
                                 // Debug.Log("Exited Water");
         }
     }
 
-    // --- 泡泡效果方法 ---
+    // --- Bubble effect methods ---
     private void StartBubbleEffect()
     {
-        // 确保有泡泡预制体，并且协程当前没有在运行
+        // Make sure there is a bubble prefab and the coroutine is not already running
         if (bubblePrefab != null && bubbleCoroutine == null)
         {
             bubbleCoroutine = StartCoroutine(SpawnBubblesCoroutine());
@@ -271,18 +290,19 @@ public class PlayerMovement : MonoBehaviour
         if (bubbleCoroutine != null)
         {
             StopCoroutine(bubbleCoroutine);
-            bubbleCoroutine = null; // 将引用置空，以便下次可以重新启动
+            bubbleCoroutine = null; // Set to null so it can be restarted next time
         }
     }
 
     private IEnumerator SpawnBubblesCoroutine()
     {
-        while (true) // 只要协程在运行，就持续生成
+        float soundTimer = 0f;
+        while (true)
         {
-            // 如果指定了 bubbleSpawnPoint，则使用它；否则使用玩家的位置
             Vector3 spawnPos = bubbleSpawnPoint != null ? bubbleSpawnPoint.position : transform.position;
-            Instantiate(bubblePrefab, spawnPos, Quaternion.identity); // 在生成点实例化泡泡
-            yield return new WaitForSeconds(bubbleSpawnInterval); // 等待指定间隔
+            Instantiate(bubblePrefab, spawnPos, Quaternion.identity);
+
+            yield return new WaitForSeconds(bubbleSpawnInterval);
         }
     }
 

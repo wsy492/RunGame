@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class SpikedBall : MonoBehaviour
 {
-    [SerializeField] private Transform[] waypoints; // 路线上的点
-    [SerializeField] private float speed = 2f; // 移动速度
+    [SerializeField] private Transform[] waypoints; // Points along the path
+    [SerializeField] private float speed = 2f; // Movement speed
     private int currentWaypointIndex = 0;
 
     private void Update()
@@ -15,16 +15,16 @@ public class SpikedBall : MonoBehaviour
     {
         if (waypoints.Length == 0) return;
 
-        // 获取当前目标点
+        // Get the current target point
         Transform targetWaypoint = waypoints[currentWaypointIndex];
 
-        // 移动到目标点
+        // Move to the target point
         transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
 
-        // 如果到达目标点，切换到下一个点
+        // If reached the target point, switch to the next point
         if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.1f)
         {
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length; // 循环路线
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length; // Loop the path
         }
     }
 
@@ -32,7 +32,7 @@ public class SpikedBall : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 触发玩家死亡逻辑
+            // Trigger player death logic
             collision.gameObject.GetComponent<PlayerLife>().Die();
         }
     }

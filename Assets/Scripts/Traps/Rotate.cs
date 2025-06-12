@@ -3,7 +3,7 @@ using UnityEngine;
 public class Rotate : MonoBehaviour
 {
     [SerializeField] private float speed = 2f;
-    [SerializeField] private int direction = 1; // 1为顺时针，-1为逆时针
+    [SerializeField] private int direction = 1;
 
     // Update is called once per frame
     void Update()

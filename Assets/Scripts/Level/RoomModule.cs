@@ -9,11 +9,11 @@ public class RoomModule : MonoBehaviour
     public GameObject[] items;
     public RoomType roomType;
     public bool hasEntrance = true;
-    [Tooltip("出口相对于入口的旋转角度（例如 90、-90、180）")]
+    [Tooltip("Rotation angle of the exit relative to the entrance (e.g. 90, -90, 180)")]
     public float exitRotationOffset = 0f;
 
-    [Header("房间分数")]
-    public int score = 100; // 新增：每个房间的分数
+    [Header("Room Score")]
+    public int score = 100; // Added: score for each room
 
     public enum RoomType
     {

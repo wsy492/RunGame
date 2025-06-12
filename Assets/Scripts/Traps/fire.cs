@@ -6,7 +6,7 @@ public class Fire : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // 触发玩家死亡逻辑
+            // Trigger the logic for player death
             collision.gameObject.GetComponent<PlayerLife>().Die();
         }
     }

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class hammer : MonoBehaviour
 {
-    public float moveDistance = 3f; // 伸缩最大距离
-    public float moveSpeed = 2f;    // 伸缩速度
+    public float moveDistance = 3f; // Maximum extension distance
+    public float moveSpeed = 2f;    // Extension speed
 
     private Vector3 startPos;
 
@@ -14,7 +14,7 @@ public class hammer : MonoBehaviour
 
     void Update()
     {
-        // 让锤子在Y轴上来回伸缩，根部不动
+        // Make the hammer move back and forth along the Y axis, with the root fixed
         float offset = Mathf.PingPong(Time.time * moveSpeed, moveDistance);
         transform.localPosition = startPos + Vector3.up * offset;
     }

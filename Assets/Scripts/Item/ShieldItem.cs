@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class ShieldItem : MonoBehaviour
 {
-    public float shieldDuration = 3f; // 护盾持续时间
+    public float shieldDuration = 3f; // Shield duration
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            // 给所有存活小人加护盾
+            // Give shield to all alive players
             var players = PlayerManager.GetAlivePlayers();
             foreach (var player in players)
             {
@@ -18,7 +18,7 @@ public class ShieldItem : MonoBehaviour
                     playerLife.ActivateShield(shieldDuration);
                 }
             }
-            Destroy(gameObject); // 吃掉道具
+            Destroy(gameObject); // Destroy the item after picking up
         }
     }
 }

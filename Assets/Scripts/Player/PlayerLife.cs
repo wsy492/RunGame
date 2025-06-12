@@ -10,7 +10,7 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] private AudioSource shieldBlockSound;
     private bool isShielded = false;
     private float shieldTimer = 0f;
-    [SerializeField] private GameObject shieldPrefab; // 拖你的泡泡预制体到这里
+    [SerializeField] private GameObject shieldPrefab; // Drag your shield prefab here
     private GameObject shieldInstance;
     private float spawnInvincibleTime = 0.5f;
     private float spawnTimer = 0f;
@@ -90,10 +90,10 @@ public class PlayerLife : MonoBehaviour
             return;
         }
 
-        // 播放死亡音效
+        // Play death sound effect
         deathSound.Play();
 
-        // 播放死亡动画
+        // Play death animation
         animator.SetTrigger("death");
 
         CameraFollow cameraFollow = Camera.main.GetComponent<CameraFollow>();
@@ -102,10 +102,10 @@ public class PlayerLife : MonoBehaviour
             cameraFollow.ShakeCamera();
         }
 
-        // 通知 PlayerManager 检查所有玩家是否死亡
+        // Notify PlayerManager to check if all players are dead
         PlayerManager.CheckAllPlayersDead();
 
-        // 延迟销毁小人，确保动画和音效播放完成
-        Destroy(gameObject, 0.5f); // 0.5 秒后销毁，可根据动画时长调整
+        // Delay destroying the player to ensure animation and sound finish playing
+        Destroy(gameObject, 0.5f); // Destroy after 0.5 seconds, adjust according to animation length
     }
 }

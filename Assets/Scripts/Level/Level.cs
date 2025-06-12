@@ -15,7 +15,7 @@ public class Level : MonoBehaviour
         if (rooms.Contains(room))
         {
             rooms.Remove(room);
-            Destroy(room.gameObject); // 销毁房间的 GameObject
+            Destroy(room.gameObject);
         }
     }
 }
