@@ -6309,8 +6309,8 @@ Transform:
   m_GameObject: {fileID: 2308909233132253829}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.71118414, w: 0.7030058}
-  m_LocalPosition: {x: -2.86, y: 25.86, z: 0.10976021}
-  m_LocalScale: {x: 0.06586776, y: 10.911096, z: 1.1202}
+  m_LocalPosition: {x: -2.1, y: 25.88, z: 0.10976021}
+  m_LocalScale: {x: 0.06586776, y: 8.297669, z: 1.1202}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5753450904858128396}
@@ -29744,12 +29744,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrancePosition: {fileID: 558656647744023559}
   exitPosition: {fileID: 7011888044117926524}
-  obstacles:
-  - {fileID: 0}
-  - {fileID: 0}
-  coins: []
-  items:
-  - {fileID: 0}
   roomType: 2
   hasEntrance: 1
   exitRotationOffset: 90

@@ -4,9 +4,6 @@ public class RoomModule : MonoBehaviour
 {
     public Transform entrancePosition;
     public Transform exitPosition;
-    public GameObject[] obstacles;
-    public GameObject[] coins;
-    public GameObject[] items;
     public RoomType roomType;
     public bool hasEntrance = true;
     [Tooltip("Rotation angle of the exit relative to the entrance (e.g. 90, -90, 180)")]

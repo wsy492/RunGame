@@ -207,56 +207,56 @@ public class LevelGeneratorTest
         Assert.GreaterOrEqual(increasedDifficulty, initialDifficulty, "Difficulty should increase or stay the same after passing rooms");
     }
 
-    // [Test]
-    // public void DifficultyManager_ConsidersRoomCountAndSurviveRate()
-    // {
-    //     // Replace PlayerManager
-    //     var pmGO = new GameObject("PlayerManager");
-    //     var pm = pmGO.AddComponent<PlayerManager>();
-    //     PlayerManager.Instance = pm;
+    [Test]
+    public void DifficultyManager_ConsidersRoomCountAndSurviveRate()
+    {
+        // Replace PlayerManager
+        var pmGO = new GameObject("PlayerManager");
+        var pm = pmGO.AddComponent<PlayerManager>();
+        PlayerManager.Instance = pm;
 
-    //     // No need to set pm.alive and pm.initial here, as we won't use GetAlivePlayers()
-    //     pm.isGameStarted = false; // Prevent Update from resetting automatically
+        // No need to set pm.alive and pm.initial here, as we won't use GetAlivePlayers()
+        pm.isGameStarted = false; // Prevent Update from resetting automatically
 
-    //     var dmGO = new GameObject("DifficultyManager");
-    //     var dm = dmGO.AddComponent<DifficultyManager>();
-    //     DifficultyManager.Instance = dm;
+        var dmGO = new GameObject("DifficultyManager");
+        var dm = dmGO.AddComponent<DifficultyManager>();
+        DifficultyManager.Instance = dm;
 
-    //     // Directly set fields
-    //     var difficultyLevelField = typeof(DifficultyManager).GetField("difficultyLevel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-    //     var initialPlayerCountField = typeof(DifficultyManager).GetField("initialPlayerCount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-    //     var passedRoomCountField = typeof(DifficultyManager).GetField("passedRoomCount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        // Directly set fields
+        var difficultyLevelField = typeof(DifficultyManager).GetField("difficultyLevel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var initialPlayerCountField = typeof(DifficultyManager).GetField("initialPlayerCount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var passedRoomCountField = typeof(DifficultyManager).GetField("passedRoomCount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-    //     initialPlayerCountField.SetValue(dm, 10); // Set initial player count to 10
+        initialPlayerCountField.SetValue(dm, 10); // Set initial player count to 10
 
-    //     // 1. Set 11 rooms, high survival rate -> difficulty 2
-    //     passedRoomCountField.SetValue(dm, 5);
-    //     // Directly set difficulty, do not call AdjustDifficulty
-    //     difficultyLevelField.SetValue(dm, 2);
-    //     Assert.AreEqual(2, dm.GetDifficultyLevel(), "11 rooms and high survival rate, difficulty should be 2");
+        // 1. Set 3 rooms, high survival rate -> difficulty 2
+        passedRoomCountField.SetValue(dm, 3);
+        // Directly set difficulty, do not call AdjustDifficulty
+        difficultyLevelField.SetValue(dm, 2);
+        Assert.AreEqual(2, dm.GetDifficultyLevel(), "11 rooms and high survival rate, difficulty should be 2");
 
-    //     // 2. Set 21 rooms, low survival rate -> difficulty 2  
-    //     passedRoomCountField.SetValue(dm, 21);
-    //     difficultyLevelField.SetValue(dm, 2);
-    //     Assert.AreEqual(2, dm.GetDifficultyLevel(), "21 rooms and low survival rate, difficulty should be 2");
+        // 2. Set 21 rooms, low survival rate -> difficulty 2  
+        passedRoomCountField.SetValue(dm, 6);
+        difficultyLevelField.SetValue(dm, 2);
+        Assert.AreEqual(2, dm.GetDifficultyLevel(), "21 rooms and low survival rate, difficulty should be 2");
 
-    //     // 3. Set 21 rooms, high survival rate -> difficulty 3
-    //     passedRoomCountField.SetValue(dm, 21);
-    //     difficultyLevelField.SetValue(dm, 3);
-    //     Assert.AreEqual(3, dm.GetDifficultyLevel(), "21 rooms and high survival rate, difficulty should be 3");
+        // 3. Set 21 rooms, high survival rate -> difficulty 3
+        passedRoomCountField.SetValue(dm, 21);
+        difficultyLevelField.SetValue(dm, 3);
+        Assert.AreEqual(3, dm.GetDifficultyLevel(), "21 rooms and high survival rate, difficulty should be 3");
 
-    //     // 4. Set 3 rooms, low survival rate -> difficulty 1
-    //     var dm2GO = new GameObject("DifficultyManager2");
-    //     var dm2 = dm2GO.AddComponent<DifficultyManager>();
-    //     DifficultyManager.Instance = dm2;
-    //     passedRoomCountField.SetValue(dm2, 3);
-    //     difficultyLevelField.SetValue(dm2, 1);
-    //     Assert.AreEqual(1, dm2.GetDifficultyLevel(), "3 rooms and low survival rate, difficulty should be 1");
+        // 4. Set 3 rooms, low survival rate -> difficulty 1
+        var dm2GO = new GameObject("DifficultyManager2");
+        var dm2 = dm2GO.AddComponent<DifficultyManager>();
+        DifficultyManager.Instance = dm2;
+        passedRoomCountField.SetValue(dm2, 3);
+        difficultyLevelField.SetValue(dm2, 1);
+        Assert.AreEqual(1, dm2.GetDifficultyLevel(), "3 rooms and low survival rate, difficulty should be 1");
 
-    //     Object.DestroyImmediate(pmGO);
-    //     Object.DestroyImmediate(dmGO);
-    //     Object.DestroyImmediate(dm2GO);
-    // }
+        Object.DestroyImmediate(pmGO);
+        Object.DestroyImmediate(dmGO);
+        Object.DestroyImmediate(dm2GO);
+    }
 
     [Test]
     public void SpawnNextRoom_UsesCorrectRoomPool_ByDifficulty()

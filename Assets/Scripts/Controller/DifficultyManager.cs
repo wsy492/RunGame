@@ -60,7 +60,7 @@ public class DifficultyManager : MonoBehaviour
         // 3. Use base difficulty as main, survival rate and alive count as fine-tuning
         int adjustedDifficulty = baseDifficulty;
 
-        if (survivalRatio > 1.6f || alivePlayers > 20)
+        if (survivalRatio > 1.6f || alivePlayers > 25)
             adjustedDifficulty = Mathf.Min(3, baseDifficulty + 2);
         else if (survivalRatio > 0.7f || alivePlayers > 10)
             adjustedDifficulty = Mathf.Min(3, baseDifficulty + 1);

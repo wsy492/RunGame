@@ -197,7 +197,6 @@ MonoBehaviour:
   bubblePrefab: {fileID: 2715546635650947393, guid: 6236956574b4d234fa13a2bf3680b007, type: 3}
   bubbleSpawnPoint: {fileID: 0}
   bubbleSpawnInterval: 0.5
-  bubbleSound: {fileID: 0}
 --- !u!114 &5077876071417471490
 MonoBehaviour:
   m_ObjectHideFlags: 0

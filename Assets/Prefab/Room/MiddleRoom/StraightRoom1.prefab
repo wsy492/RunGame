@@ -11390,17 +11390,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrancePosition: {fileID: 5075724138788123478}
   exitPosition: {fileID: 5695983265624650852}
-  obstacles:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  coins:
-  - {fileID: 5370656395582501974}
-  items:
-  - {fileID: 0}
   roomType: 1
   hasEntrance: 1
   exitRotationOffset: 0
@@ -21821,11 +21810,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.62
+      value: 4.68
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.19
+      value: -5.31
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22093,11 +22082,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.88
+      value: 6.74
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.17
+      value: -5.27
       objectReference: {fileID: 0}
     - target: {fileID: 8285748984643497197, guid: 58b5d112777c0bc4cb5f06c4cedfe871, type: 3}
       propertyPath: m_LocalPosition.z

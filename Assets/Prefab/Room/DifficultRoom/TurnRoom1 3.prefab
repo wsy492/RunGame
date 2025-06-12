@@ -6355,8 +6355,8 @@ Transform:
   m_GameObject: {fileID: 2308909233132253829}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.71118414, w: 0.7030058}
-  m_LocalPosition: {x: -2.26, y: 25.88, z: 0.10976021}
-  m_LocalScale: {x: 0.06586776, y: 10.911096, z: 1.1202}
+  m_LocalPosition: {x: -3, y: 25.91, z: 0.10976021}
+  m_LocalScale: {x: 0.06586776, y: 8.070996, z: 1.1202}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5753450904858128396}
@@ -27848,12 +27848,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrancePosition: {fileID: 558656647744023559}
   exitPosition: {fileID: 7011888044117926524}
-  obstacles:
-  - {fileID: 0}
-  - {fileID: 0}
-  coins: []
-  items:
-  - {fileID: 0}
   roomType: 2
   hasEntrance: 1
   exitRotationOffset: 90
@@ -29930,11 +29924,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3518258661786837329, guid: 58554058ad4b87043bfe5b40fa6a0936, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.21
+      value: -13.84
       objectReference: {fileID: 0}
     - target: {fileID: 3518258661786837329, guid: 58554058ad4b87043bfe5b40fa6a0936, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.86
+      value: -2.1
       objectReference: {fileID: 0}
     - target: {fileID: 3518258661786837329, guid: 58554058ad4b87043bfe5b40fa6a0936, type: 3}
       propertyPath: m_LocalPosition.z

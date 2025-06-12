@@ -17394,13 +17394,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entrancePosition: {fileID: 8657115078802090764}
   exitPosition: {fileID: 8203538127176823306}
-  obstacles:
-  - {fileID: 8533233881526952110}
-  - {fileID: 0}
-  coins:
-  - {fileID: 0}
-  items:
-  - {fileID: 2642623788763464299}
   roomType: 2
   hasEntrance: 1
   exitRotationOffset: -90
@@ -17495,8 +17488,8 @@ Transform:
   m_GameObject: {fileID: 5344475407706286401}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.71118414, w: 0.7030058}
-  m_LocalPosition: {x: -0.49, y: -26.37, z: 0.10976021}
-  m_LocalScale: {x: 0.06586776, y: 10.911096, z: 1.1202}
+  m_LocalPosition: {x: -2.01, y: -26.41, z: 0.10976021}
+  m_LocalScale: {x: 0.06586776, y: 7.9195194, z: 1.1202}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6136040365176388867}
@@ -19085,10 +19078,5 @@ PrefabInstance:
 --- !u!4 &7098770047450792920 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4261585447155845012, guid: 9d12c6098b0e9394a8ab959d4a05d85b, type: 3}
-  m_PrefabInstance: {fileID: 6460366240061719628}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8533233881526952110 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3444118868555195618, guid: 9d12c6098b0e9394a8ab959d4a05d85b, type: 3}
   m_PrefabInstance: {fileID: 6460366240061719628}
   m_PrefabAsset: {fileID: 0}
