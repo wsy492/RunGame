@@ -52,7 +52,6 @@ Shader "Custom/SpriteTextureScroll"
             fixed4 frag (v2f i) : SV_Target
 {
     fixed4 c = tex2D(_MainTex, i.uv) * _RendererColor;
-    // 用 RendererColor 的 alpha 覆盖
     c.a = tex2D(_MainTex, i.uv).a * _RendererColor.a;
     return c;
 }
