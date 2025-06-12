@@ -55,7 +55,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 206233001300598865}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 560596330909938314}
   - component: {fileID: 445179168900212459}
   - component: {fileID: 6184907913400196776}
+  - component: {fileID: 6728780825630128219}
   m_Layer: 0
   m_Name: Saw
   m_TagString: Trap
@@ -184,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  direction: 1
 --- !u!61 &6184907913400196776
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -230,6 +232,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.38, y: 0.38}
   m_EdgeRadius: 0
+--- !u!114 &6728780825630128219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3928642294072336915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7e0a111f28ce9448c19d9b303abbfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7718472769287839116
 GameObject:
   m_ObjectHideFlags: 0

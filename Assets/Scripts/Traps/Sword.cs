@@ -1,31 +1,21 @@
 using UnityEngine;
 
-public class Sword : MonoBehaviour
+public class Sword : DeathTrap
 {
-    [SerializeField] private float speed = 5f; // Sword flying speed
+    [SerializeField] private float speed = 5f;
 
     void Start()
     {
-        Destroy(gameObject, 5f); // Auto destroy after 5 seconds
+        Destroy(gameObject, 5f);
     }
 
     void Update()
     {
-        // Move forward at a constant speed along its own direction
         transform.Translate(Vector3.right * speed * Time.deltaTime, Space.Self);
     }
 
-    // Detect player collision
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            var playerLife = other.GetComponent<PlayerLife>();
-            if (playerLife != null)
-            {
-                playerLife.Die();
-            }
-        }
-        // Do not destroy itself, not affected by anything
+        base.OnTriggerEnter2D(other); // Call the base class's lethal logic directly
     }
 }

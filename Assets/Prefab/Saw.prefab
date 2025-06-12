@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4234318620178101022}
   - component: {fileID: 7749379042296967998}
   - component: {fileID: 9152866079817213162}
-  - component: {fileID: 3241799905650531497}
+  - component: {fileID: 1592044064247916657}
+  - component: {fileID: -7592824562413439206}
   m_Layer: 0
   m_Name: Saw
   m_TagString: Trap
@@ -102,7 +103,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
---- !u!61 &3241799905650531497
+  direction: 1
+--- !u!114 &1592044064247916657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5741329173017305106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7e0a111f28ce9448c19d9b303abbfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &-7592824562413439206
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

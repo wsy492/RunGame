@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpikedBall : MonoBehaviour
+public class SpikedBall : DeathTrap
 {
     [SerializeField] private Transform[] waypoints; // Points along the path
     [SerializeField] private float speed = 2f; // Movement speed
@@ -30,10 +30,6 @@ public class SpikedBall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            // Trigger player death logic
-            collision.gameObject.GetComponent<PlayerLife>().Die();
-        }
+        TriggerDeath(collision.collider); // Reuse the DeathTrap logic
     }
 }

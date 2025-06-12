@@ -62,7 +62,7 @@ MonoBehaviour:
   roomType: 0
   hasEntrance: 0
   exitRotationOffset: 0
-  score: 20
+  score: 10
 --- !u!1 &472248819355282180
 GameObject:
   m_ObjectHideFlags: 0

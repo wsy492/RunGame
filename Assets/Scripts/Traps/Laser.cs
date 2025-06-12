@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Laser : MonoBehaviour
+public class Laser : DeathTrap
 {
     private Renderer rend;
 
@@ -21,20 +21,12 @@ public class Laser : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        // The laser only works when it is visible in the camera view
+        // 只有在可见时才触发致死逻辑
         if (rend != null && rend.isVisible)
         {
-            if (other.CompareTag("Player"))
-            {
-                // Get the PlayerLife script and call the death method
-                PlayerLife playerLife = other.GetComponent<PlayerLife>();
-                if (playerLife != null)
-                {
-                    playerLife.Die();
-                }
-            }
+            base.OnTriggerEnter2D(other); // 复用 DeathTrap 的致死逻辑
         }
     }
 }

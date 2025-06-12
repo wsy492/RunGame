@@ -1,13 +1,9 @@
 using UnityEngine;
 
-public class Fire : MonoBehaviour
+public class Fire : DeathTrap
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            // Trigger the logic for player death
-            collision.gameObject.GetComponent<PlayerLife>().Die();
-        }
+        TriggerDeath(collision.collider); // Calls the superclass's lethal logic
     }
 }
