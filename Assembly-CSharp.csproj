@@ -71,7 +71,9 @@
     <Compile Include="Assets\Scripts\Item\ZoomItem.cs" />
     <Compile Include="Assets\Scripts\Controller\Finish.cs" />
     <Compile Include="Assets\Scripts\Controller\Score.cs" />
+    <Compile Include="Assets\Scripts\Traps\hammer.cs" />
     <Compile Include="Assets\Scripts\Controller\CherryManager.cs" />
+    <Compile Include="Assets\Scripts\Effects\BubbleBehavior.cs" />
     <Compile Include="Assets\Scripts\Level\RoomTrigger.cs" />
     <Compile Include="Assets\Scripts\Level\RoomModule.cs" />
     <Compile Include="Assets\Scripts\Level\LevelGenerator.cs" />
@@ -86,14 +88,29 @@
     <Compile Include="Assets\Scripts\Item\AddPlayerItem.cs" />
     <Compile Include="Assets\Scripts\Traps\WayPoint.cs" />
     <Compile Include="Assets\Scripts\Item\Hint.cs" />
+    <Compile Include="Assets\Scripts\Traps\smashers_spikes.cs" />
     <Compile Include="Assets\Scripts\Wall\BlueWall.cs" />
     <Compile Include="Assets\Scripts\Wall\AttractWallBase.cs" />
+    <Compile Include="Assets\Scripts\UIController\EndMenu.cs" />
     <Compile Include="Assets\Scripts\Controller\GravityController.cs" />
+    <Compile Include="Assets\Scripts\Effects\WaterScoll.cs" />
+    <Compile Include="Assets\Scripts\UIController\StartMenu.cs" />
     <Compile Include="Assets\Scripts\Level\Level.cs" />
     <Compile Include="Assets\Scripts\Traps\Laser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_01.shader" />
+    <None Include="Assets\Jiggly Bubble Free\Shaders\Particle Alpha Blended Cubemap.shader" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_06.shader" />
+    <None Include="Assets\Jiggly Bubble Free\Shaders\Particle Alpha Blended Cubemap Skybox.shader" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_02.shader" />
     <None Include="Assets\ArcadeGameBGM#3\ReadMe.txt" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_04.shader" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_05.shader" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_03.shader" />
+    <None Include="Assets\shaders\SpriteTextureScroll.shader" />
+    <None Include="Assets\Jiggly Bubble Free\readme_Jiggly_Bubble_Free.txt" />
+    <None Include="Assets\Stylized Ocean Materials\Shader\Water_Ocean_01_Smooth.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1330,6 +1347,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="NewAssembly.csproj" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <ItemGroup>
